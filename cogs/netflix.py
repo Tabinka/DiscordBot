@@ -8,8 +8,9 @@ import requests.auth
 import json
 import html
 import time
+import os
 
-RAPID_API_KEY = config('RAPID_API_KEY')
+RAPID_API_KEY = os.environ['RAPID_API_KEY']
 
 
 class Netflix(commands.Cog):

@@ -1,7 +1,8 @@
 import discord
 from discord.ext import commands
 import youtube_dl
-
+# TODO: Add sending messages into channel with actual playing music
+# TODO: Add queue for songs and playlist
 class Radio(commands.Cog):
     
     def __init__(self, client):

@@ -33,6 +33,21 @@ class Basic(commands.Cog):
     @commands.command()
     async def ping(self, ctx):
         await ctx.send(f"Pong! {round(self.client.latency * 1000)}ms")
+        
+    @commands.command()
+    async def party(self, ctx):
+        party = "<a:apartyblob:857886687458885672> <a:apartyblob:857886687458885672> <a:apartyblob:857886687458885672> <a:apartyblob:857886687458885672> <a:apartyblob:857886687458885672> <a:apartyblob:857886687458885672> <a:apartyblob:857886687458885672>"
+        await ctx.send(party)
+        
+    @commands.command()
+    async def gabihomesick(self, ctx):
+        emoji = "<a:gabihomesick:878180337514057769>"
+        await ctx.send(emoji)
+        
+    @commands.command()
+    async def swag(self, ctx):
+        emoji = "<a:lil_swag:857892198674726922>"
+        await ctx.send(emoji)
 
     @tasks.loop(seconds=500)
     async def change_status(self):
