@@ -1,22 +1,11 @@
 import discord
 from discord.channel import DMChannel
 from discord.ext import commands, tasks
-from itertools import cycle
-
 
 class Basic(commands.Cog):
 
     def __init__(self, client):
         self.client = client
-        self.status = cycle(
-            ["I am clowning here.", "Making plans for world dominantion."])
-        # self.change_status.start()
-
-    # Event prints in console when bot is ready to use
-    # TODO: Add sending funny little message into dedicated channel about bot being ready
-    @commands.Cog.listener()
-    async def on_ready(self):
-        print("Bot is online! 🤖")
 
     # Event prints in console when a member joins a server
     # TODO: Add function to inform whole server about user joining a server in dedicated channel
@@ -34,6 +23,8 @@ class Basic(commands.Cog):
     async def ping(self, ctx):
         await ctx.send(f"Pong! {round(self.client.latency * 1000)}ms")
         
+        
+    # TODO: Add more features for posting animated emojis (like hypemode etc..)
     @commands.command()
     async def party(self, ctx):
         party = "<a:apartyblob:857886687458885672> <a:apartyblob:857886687458885672> <a:apartyblob:857886687458885672> <a:apartyblob:857886687458885672> <a:apartyblob:857886687458885672> <a:apartyblob:857886687458885672> <a:apartyblob:857886687458885672>"
@@ -48,10 +39,11 @@ class Basic(commands.Cog):
     async def swag(self, ctx):
         emoji = "<a:lil_swag:857892198674726922>"
         await ctx.send(emoji)
-
-    @tasks.loop(seconds=500)
-    async def change_status(self):
-        await self.client.change_presence(status=discord.Status.idle, activity=discord.Game(next(self.status)))
+        
+    @commands.command()
+    async def hype(self, ctx):
+        emoji = "<a:200:865494877143040031> <a:200:865494877143040031> <a:200:865494877143040031> <a:200:865494877143040031> <a:200:865494877143040031>"
+        await ctx.send(emoji)
 
 
 def setup(client):
