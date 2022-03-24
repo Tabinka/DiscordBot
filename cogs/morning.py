@@ -34,13 +34,13 @@ class Morning(commands.Cog):
             "units": "metric",
             "appid": WEATHER_API
         }
-        self.channels = self.client.get_channel(870725266123677726)
         self.morning_routine.start()
 
     # TODO: Recreate that function to be more elegant
     @tasks.loop(hours=1)
     async def morning_routine(self):
         if check_time() == "07":
+            channels = self.client.get_channel(870725266123677726)
             svatky_response = requests.get(url=SVATKY_URL)
             news_response = requests.get(url=NEWS_URL, params=self.news_parameters)
             weather_response = requests.get(url=WEATHER_URL, params=self.weather_parameters)
@@ -62,7 +62,7 @@ class Morning(commands.Cog):
             weather_type = data["current"]["weather"][0]["description"]
             temp = round(data["current"]["temp"])
 
-            await self.channels.send(
+            await channels.send(
                 f"**Good Morning!** ☀️ \n\nToday is {dt.datetime.now().date().strftime('%A - %d.%m.')} and name day has "
                 f"{svatek_name}\n\nWeather for today is going to be {weather_type} and {temp}°C\n\n**Your random motivational "
                 f"quote**\n *{random_quote}*\n\n**Fresh news**\n{articles}")
