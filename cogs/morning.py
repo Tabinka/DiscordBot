@@ -11,12 +11,6 @@ QUOTES_URL = "https://quotes.rest/qod"
 SVATKY_URL = "https://svatky.adresa.info/json"
 
 
-def check_time():
-    time_now = dt.datetime.now().time()
-    formatted = time_now.strftime("%H")
-    return formatted
-
-
 class Morning(commands.Cog):
 
     def __init__(self, client):
@@ -28,6 +22,11 @@ class Morning(commands.Cog):
             "appid": WEATHER_API
         }
         self.morning_routine.start()
+        
+    def check_time(self):
+        time_now = dt.datetime.now().time()
+        formatted = time_now.strftime("%H")
+        return formatted
 
     # TODO: Recreate that function to be more elegant
     @tasks.loop(hours=1)
