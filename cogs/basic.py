@@ -1,11 +1,12 @@
-import discord
+import discord, logging
 from discord.channel import DMChannel
 from discord.ext import commands, tasks
+from discord.ext.commands import has_permissions, MissingPermissions
 import re
 
 # TODO: Error messages
 
-class Basic(commands.Cog, name="Basic Commands", description="Basic commands for fun and magic."):
+class Basic(commands.Cog, description="Basic commands for fun and magic."):
 
     def __init__(self, client):
         self.client = client
@@ -31,7 +32,7 @@ class Basic(commands.Cog, name="Basic Commands", description="Basic commands for
         await ctx.send(f"Pong! {round(self.client.latency * 1000)}ms")
         
     # TODO: Add more features for posting animated emojis (like hypemode etc..)
-    @commands.command(description="Spawn animated emojis with a party blop!")
+    @commands.command(brief="Spawn animated emojis with a party blop!")
     async def party(self, ctx):
         party = "<a:apartyblob:857886687458885672> <a:apartyblob:857886687458885672> <a:apartyblob:857886687458885672> <a:apartyblob:857886687458885672> <a:apartyblob:857886687458885672> <a:apartyblob:857886687458885672> <a:apartyblob:857886687458885672>"
         await ctx.send(party)
@@ -92,5 +93,5 @@ class Basic(commands.Cog, name="Basic Commands", description="Basic commands for
                 return
 
 
-def setup(client):
-    client.add_cog(Basic(client))
+async def setup(client):
+    await client.add_cog(Basic(client))

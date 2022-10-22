@@ -1,4 +1,5 @@
 import discord
+import asyncio
 import os
 import logging
 import logging.handlers
@@ -10,10 +11,10 @@ from dotenv import load_dotenv
 load_dotenv()
         
 menu = DefaultMenu(page_left="\U0001F44D", page_right="👎", remove="🌊", active_time=5)
-
+intents = discord.Intents.all()
 logger = logging.getLogger('discord')
-logger.setLevel(logging.DEBUG)
-logging.getLogger('discord.http').setLevel(logging.INFO)
+logger.setLevel(logging.WARNING)
+logging.getLogger('discord.http').setLevel(logging.WARNING)
 
 handler = logging.handlers.RotatingFileHandler(
     filename='discord.log',
@@ -26,7 +27,7 @@ formatter = logging.Formatter('[{asctime}] [{levelname:<8}] {name}: {message}', 
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 
-client = commands.Bot(command_prefix="!", help_command=PrettyHelp(menu=menu))
+client = commands.Bot(command_prefix="!", help_command=PrettyHelp(menu=menu), intents=intents)
 status = cycle(["I am clowning here.", "Making plans for world dominantion."])
 
 # Event prints in console when bot is ready to use
@@ -42,19 +43,25 @@ async def change_status():
 
 @client.command()
 async def load(ctx, extension):
-    client.load_extension(f"cogs.{extension}")
+    await client.load_extension(f"cogs.{extension}")
     
 @client.command()
 async def unload(ctx, extension):
-    client.unload_extension(f"cogs.{extension}")
+    await client.unload_extension(f"cogs.{extension}")
     
 @client.command()
 async def reload(ctx, extension):
-    client.unload_extension(f"cogs.{extension}")
-    client.load_extension(f"cogs.{extension}")
+    await client.unload_extension(f"cogs.{extension}")
+    await client.load_extension(f"cogs.{extension}")
     
-for filename in os.listdir('./cogs'):
-    if filename.endswith('.py'):
-        client.load_extension(f'cogs.{filename[:-3]}')
+async def load_extensions():
+    for filename in os.listdir("./cogs"):
+        if filename.endswith(".py"):
+            await client.load_extension(f"cogs.{filename[:-3]}")
         
-client.run(os.environ['DISCORD_KEY'])
+async def main():
+    async with client:
+        await load_extensions()
+        await client.start(os.environ['DISCORD_KEY'])
+        
+asyncio.run(main())

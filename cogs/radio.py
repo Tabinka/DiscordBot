@@ -45,5 +45,5 @@ class Radio(commands.Cog):
         ctx.voice_client.resume()
         await ctx.send("Resumed 🔊")
     
-def setup(client):
-    client.add_cog(Radio(client))
+async def setup(client):
+    await client.add_cog(Radio(client))

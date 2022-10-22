@@ -2,7 +2,6 @@ import discord
 import datetime as dt
 from discord.channel import DMChannel
 from discord.ext import commands, tasks
-from decouple import config
 import requests
 import requests.auth
 import json
@@ -46,5 +45,5 @@ class Netflix(commands.Cog):
                 await self.channel.send(text)
 
 
-def setup(client):
-    client.add_cog(Netflix(client))
+async def setup(client):
+    await client.add_cog(Netflix(client))

@@ -54,5 +54,5 @@ class Morning(commands.Cog):
                 await self.morning_routine()
         
         
-def setup(client):
-    client.add_cog(Morning(client))
+async def setup(client):
+    await client.add_cog(Morning(client))
