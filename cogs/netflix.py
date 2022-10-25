@@ -4,7 +4,6 @@ from discord.channel import DMChannel
 from discord.ext import commands, tasks
 import requests
 import requests.auth
-import json
 import html
 import time
 import os

@@ -27,7 +27,7 @@ class Basic(commands.Cog, description="Basic commands for fun and magic."):
     async def on_member_remove(self, member):
         logging.info(f"{member} has left a server.")
 
-    @commands.command(description="Check bot response time.")
+    @commands.command(brief="Check bot response time.")
     async def ping(self, ctx):
         await ctx.send(f"Pong! {round(self.client.latency * 1000)}ms")
         
@@ -37,22 +37,22 @@ class Basic(commands.Cog, description="Basic commands for fun and magic."):
         party = "<a:apartyblob:857886687458885672> <a:apartyblob:857886687458885672> <a:apartyblob:857886687458885672> <a:apartyblob:857886687458885672> <a:apartyblob:857886687458885672> <a:apartyblob:857886687458885672> <a:apartyblob:857886687458885672>"
         await ctx.send(party)
         
-    @commands.command(description="Spawn animated emoji with a gabihomesick!")
+    @commands.command(brief="Spawn animated emoji with a gabihomesick!")
     async def gabihomesick(self, ctx):
         emoji = "<a:gabihomesick:878180337514057769>"
         await ctx.send(emoji)
         
-    @commands.command(description="Spawn animated emoji with a lil swag!")
+    @commands.command(brief="Spawn animated emoji with a lil swag!")
     async def swag(self, ctx):
         emoji = "<a:lil_swag:857892198674726922>"
         await ctx.send(emoji)
         
-    @commands.command(description="Spawn HYPE!! emojis!")
+    @commands.command(brief="Spawn HYPE!! emojis!")
     async def hype(self, ctx):
         emoji = "<a:200:865494877143040031> <a:200:865494877143040031> <a:200:865494877143040031> <a:200:865494877143040031> <a:200:865494877143040031>"
         await ctx.send(emoji)
         
-    @commands.command(description="Clear messages from channel.")
+    @commands.command(brief="Clear messages from channel.")
     @commands.has_permissions(manage_messages=True)
     async def clear(self, ctx, amount: int):
         await ctx.channel.purge(limit=amount)
@@ -63,14 +63,14 @@ class Basic(commands.Cog, description="Basic commands for fun and magic."):
             await ctx.send("Please specify amounts of messages to delete.")
 
 
-    @commands.command(description="Kick someone from server if they are anoying (admin only).")
+    @commands.command(brief="Kick someone from server if they are anoying (admin only).")
     @commands.has_permissions(kick_members=True)
     async def kick(self, ctx, member: discord.Member, *, reason=None):
         await member.kick(reason=reason)
         logging.info(f"User {member.mention} was kicked.")
         await ctx.send(f"User {member.mention} was kicked.")
 
-    @commands.command(description="Ban someone from server if they are very naughty (admin only).")
+    @commands.command(brief="Ban someone from server if they are very naughty (admin only).")
     @commands.has_permissions(ban_members=True)
     async def ban(self, ctx, member: discord.Member, *, reason=None):
         await member.ban(reason=reason)
@@ -78,7 +78,7 @@ class Basic(commands.Cog, description="Basic commands for fun and magic."):
         await ctx.send(f"User {member.mention} was banned.")
 
 
-    @commands.command(description="Unban someone from server if they are good again (admin only).")
+    @commands.command(brief="Unban someone from server if they are good again (admin only).")
     @commands.has_permissions(administrator=True)
     async def unban(self, ctx, *, member):
         banned_users = await ctx.guild.bans()
