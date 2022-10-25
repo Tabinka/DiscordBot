@@ -17,20 +17,19 @@ class Netflix(commands.Cog):
         self.client = client
         self.channel = client.get_channel(797512794081460226)
         self.url = "https://unogs-unogs-v1.p.rapidapi.com/aaapi.cgi"
-        self.querystring = {"q": "get:new1:US",
+        self.querystring = {"q": "get:new1:CZ",
                             "p": "1", "t": "ns", "st": "adv"}
         self.headers = {
             'x-rapidapi-host': "unogs-unogs-v1.p.rapidapi.com",
             'x-rapidapi-key': RAPID_API_KEY
         }
-        # self.get_new_content.start()
 
+    # TODO: Add command for random movie / TV series pick
+
+
+    # TODO: Refactor this code for command
     @commands.command()
-    async def netflix_upcomming(self, ctx):
-        await ctx.send("Upcomming netflix 💩")
-
-    @tasks.loop(hours=24)
-    async def get_new_content(self):
+    async def get_new_content(self, ctx):
         response = requests.request(
             "GET", self.url, headers=self.headers, params=self.querystring)
         data_count = int(response.json()["COUNT"])
@@ -39,9 +38,10 @@ class Netflix(commands.Cog):
                 time.sleep(5)
                 title = html.unescape(item['title'])
                 synopsis = html.unescape(item['synopsis'])
-                text = f"**Netflix released new content!** 🙈\n\n**{title}**\n\n*{synopsis}\n\nType:{item['type']}*" \
-                    f"\n\n{item['image']}"
-                await self.channel.send(text)
+                embedMess = discord.Embed(title=title, color=discord.Color.red(), description=synopsis)
+                embedMess.set_thumbnail(url=item['image'])
+                await ctx.send(embed=embedMess)
+                #await self.channel.send(text)
 
 
 async def setup(client):
