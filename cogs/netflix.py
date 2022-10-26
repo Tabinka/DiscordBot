@@ -1,7 +1,5 @@
 import discord
-import datetime as dt
-from discord.channel import DMChannel
-from discord.ext import commands, tasks
+from discord.ext import commands
 import requests
 import requests.auth
 import html
@@ -41,7 +39,6 @@ class Netflix(commands.Cog):
                 embedMess = discord.Embed(title=title, color=discord.Color.red(), description=synopsis)
                 embedMess.set_thumbnail(url=item['image'])
                 await ctx.send(embed=embedMess)
-                #await self.channel.send(text)
 
 
 async def setup(client):
