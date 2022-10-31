@@ -33,14 +33,12 @@ class Morning(commands.Cog):
     @tasks.loop(hours=1)
     async def morning_routine(self):
         if(self.check_time() == "07"):
-            
             try:
                 svatky_response = requests.get(url=SVATKY_URL)
                 weather_response = requests.get(url=WEATHER_URL, params=self.weather_parameters)
                 quotes_response = requests.get(url=QUOTES_URL)
 
                 if svatky_response and weather_response and quotes_response:
-
                     random_quote = quotes_response.json()["contents"]["quotes"][0]["quote"]
                     data = weather_response.json()
                     svatek_name = ""
@@ -54,13 +52,11 @@ class Morning(commands.Cog):
                         f"*{svatek_name}*\n\nWeather for today is going to be *{weather_type} and {temp}°C*\n\n**Your random motivational " /
                         f"quote**\n *{random_quote}*")
                     embedMess.set_footer(text="Don't forget to wash your balls and face. Thank you! 🤓")
+                    await self.channels.send(embed=embedMess)
                 else: 
                     raise ValueError("One of the response is empty.")
-
             except (AttributeError, KeyError, ValueError):
                 await self.morning_routine()
-
-            await self.channels.send(embed=embedMess)
         
         
 async def setup(client):
