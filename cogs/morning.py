@@ -51,6 +51,7 @@ class Morning(commands.Cog):
                     embedM = discord.Embed(title="**☕️ Good Morning! ☀**", color=discord.Color.yellow(), description=f"Today is *{dt.datetime.now().date().strftime('%A - %d.%m.')}* and name day has *{svatek_name}*\n\nWeather for today is going to be *{weather_type} and {temp}°C*\n\n**Your random motivational quote**\n *{random_quote}*")
                     embedM.set_footer(text="Don't forget to wash your balls and face. Thank you! 🤓")
                     await channel.send(embed=embedM)
+                    
                 else: 
                     raise ValueError("One of the response is empty.")
             except (AttributeError, KeyError, ValueError):
