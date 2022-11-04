@@ -1,4 +1,4 @@
-import discord
+import discord,logging
 import asyncio
 import os
 import logging
@@ -38,7 +38,7 @@ status = cycle(["I am clowning here.", "Making plans for world dominantion."])
 # Event prints in console when bot is ready to use
 @client.event
 async def on_ready():
-    channel = client.get_channel(797512794081460226)
+    channel = client.get_channel(870725266123677726)
     change_status.start()
     try:
         api_response = api_instance.gifs_random_get(api_key=api_key, tag=tag)
@@ -46,7 +46,7 @@ async def on_ready():
         #embed=discord.Embed(title="Hello there") 
         await channel.send(content=f"**Bot has spawned**🤖\n\nHello there tiny humans. I am back and even stronger! 😈 \n{api_response.data.url}")
     except ApiException as e:
-        print("Exception when calling DefaultApi->gifs_random_get: %s\n" % e)    
+        logging.error("Exception when calling DefaultApi->gifs_random_get: %s\n" % e)    
     print("Bot is online! 🤖")
     
 @tasks.loop(seconds=500)

@@ -54,6 +54,7 @@ class Morning(commands.Cog):
                 else: 
                     raise ValueError("One of the response is empty.")
             except (AttributeError, KeyError, ValueError):
+                logging.error("Morning routine was not successful.") 
                 await self.morning_routine()
         
         
