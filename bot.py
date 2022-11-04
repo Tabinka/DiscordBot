@@ -7,11 +7,16 @@ from discord.ext import commands, tasks
 from pretty_help import DefaultMenu, PrettyHelp
 from itertools import cycle
 from dotenv import load_dotenv
+import giphy_client
+from giphy_client.rest import ApiException
 
 load_dotenv()
         
-menu = DefaultMenu(page_left="\U0001F44D", page_right="👎", remove="🌊", active_time=5)
+menu = DefaultMenu(page_left="🤛", page_right="🤜", remove="🌊", active_time=5)
 intents = discord.Intents.all()
+api_instance = giphy_client.DefaultApi()
+api_key = 'Q2za11VLRlVonS59oxbFgqkekk9Av2oZ'
+tag = 'hello'
 logger = logging.getLogger('discord')
 logger.setLevel(logging.WARNING)
 logging.getLogger('discord.http').setLevel(logging.WARNING)
@@ -31,10 +36,17 @@ client = commands.Bot(command_prefix="!", help_command=PrettyHelp(menu=menu), in
 status = cycle(["I am clowning here.", "Making plans for world dominantion."])
 
 # Event prints in console when bot is ready to use
-# TODO: Add sending funny little message into dedicated channel about bot being ready
 @client.event
 async def on_ready():
+    channel = client.get_channel(797512794081460226)
     change_status.start()
+    try:
+        api_response = api_instance.gifs_random_get(api_key=api_key, tag=tag)
+        ## TODO: Bug with embeds, need to check it
+        #embed=discord.Embed(title="Hello there") 
+        await channel.send(content=f"**Bot has spawned**🤖\n\nHello there tiny humans. I am back and even stronger! 😈 \n{api_response.data.url}")
+    except ApiException as e:
+        print("Exception when calling DefaultApi->gifs_random_get: %s\n" % e)    
     print("Bot is online! 🤖")
     
 @tasks.loop(seconds=500)

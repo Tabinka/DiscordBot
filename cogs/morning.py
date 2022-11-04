@@ -15,7 +15,6 @@ class Morning(commands.Cog):
 
     def __init__(self, client):
         self.client = client
-        self.channels = client.get_channel(870725266123677726)
         self.weather_parameters = {
             "lat": 49.67763,
             "lon": 18.67078,
@@ -34,6 +33,7 @@ class Morning(commands.Cog):
     async def morning_routine(self):
         if(self.check_time() == "07"):
             try:
+                channel = client.get_channel(870725266123677726)
                 svatky_response = requests.get(url=SVATKY_URL)
                 weather_response = requests.get(url=WEATHER_URL, params=self.weather_parameters)
                 quotes_response = requests.get(url=QUOTES_URL)
@@ -48,9 +48,9 @@ class Morning(commands.Cog):
                     weather_type = data["current"]["weather"][0]["description"]
                     temp = round(data["current"]["temp"])
 
-                    embedMess = discord.Embed(title="**☕️ Good Morning! ☀**", color=discord.Color.yellow(), description=f"Today is *{dt.datetime.now().date().strftime('%A - %d.%m.')}* and name day has *{svatek_name}*\n\nWeather for today is going to be *{weather_type} and {temp}°C*\n\n**Your random motivational quote**\n *{random_quote}*")
-                    embedMess.set_footer(text="Don't forget to wash your balls and face. Thank you! 🤓")
-                    await self.channels.send(embed=embedMess)
+                    embedM = discord.Embed(title="**☕️ Good Morning! ☀**", color=discord.Color.yellow(), description=f"Today is *{dt.datetime.now().date().strftime('%A - %d.%m.')}* and name day has *{svatek_name}*\n\nWeather for today is going to be *{weather_type} and {temp}°C*\n\n**Your random motivational quote**\n *{random_quote}*")
+                    embedM.set_footer(text="Don't forget to wash your balls and face. Thank you! 🤓")
+                    await channel.send(embed=embedM)
                 else: 
                     raise ValueError("One of the response is empty.")
             except (AttributeError, KeyError, ValueError):
