@@ -14,27 +14,28 @@ from tabulate import tabulate
 import time
 import html
 
-CLIENT_AUTH = requests.auth.HTTPBasicAuth(config('CLIENT_ID'), config('APP_SECRET'))
-POST_DATA = {"grant_type": "password", "username": "tabinka", "password": config('REDDIT_PASS')}
-REDDIT_HEADERS = {"User-Agent": "Opera/9.64 (Windows NT 5.2; sl-SI) Presto/2.12.312 Version/11.00 by Tabinka"}
-WEATHER_API = config('WEATHER_API')
-NEWS_API = config('NEWS_API')
+CLIENT_AUTH = requests.auth.HTTPBasicAuth(config("CLIENT_ID"), config("APP_SECRET"))
+POST_DATA = {
+    "grant_type": "password",
+    "username": "tabinka",
+    "password": config("REDDIT_PASS"),
+}
+REDDIT_HEADERS = {
+    "User-Agent": "Opera/9.64 (Windows NT 5.2; sl-SI) Presto/2.12.312 Version/11.00 by Tabinka"
+}
+WEATHER_API = config("WEATHER_API")
+NEWS_API = config("NEWS_API")
 WEATHER_URL = "https://api.openweathermap.org/data/2.5/onecall"
-RAPID_API_KEY = config('RAPID_API_KEY')
+RAPID_API_KEY = config("RAPID_API_KEY")
 QUOTES_URL = "https://quotes.rest/qod"
 NEWS_URL = "https://newsapi.org/v2/top-headlines"
 SVATKY_URL = "https://svatky.adresa.info/json"
-#SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REDIRECT_URI = tk.config_from_environment()
-#conf = tk.config_from_environment(return_refresh=True)
-#SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REDIRECT_URI, SPOTIFY_USER_REFRESH = conf
-#token = tk.refresh_user_token(*conf[:2], conf[3])
-#spotify = tk.Spotify(token)
-PAR = {
-    "lat": 49.67763,
-    "lon": 18.67078,
-    "units": "metric",
-    "appid": WEATHER_API
-}
+# SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REDIRECT_URI = tk.config_from_environment()
+# conf = tk.config_from_environment(return_refresh=True)
+# SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REDIRECT_URI, SPOTIFY_USER_REFRESH = conf
+# token = tk.refresh_user_token(*conf[:2], conf[3])
+# spotify = tk.Spotify(token)
+PAR = {"lat": 49.67763, "lon": 18.67078, "units": "metric", "appid": WEATHER_API}
 
 
 def check_time():
@@ -44,27 +45,41 @@ def check_time():
 
 
 def getting_free_deals():
-    reddit_response = requests.post("https://www.reddit.com/api/v1/access_token", auth=CLIENT_AUTH, data=POST_DATA,
-                                    headers=REDDIT_HEADERS)
+    reddit_response = requests.post(
+        "https://www.reddit.com/api/v1/access_token",
+        auth=CLIENT_AUTH,
+        data=POST_DATA,
+        headers=REDDIT_HEADERS,
+    )
     reddit_access_token = reddit_response.json()["access_token"]
 
-    r_headers = {"Authorization": f"bearer {reddit_access_token}",
-                 "User-Agent": "Opera/9.64 (Windows NT 5.2; sl-SI) Presto/2.12.312 Version/11.00 by Tabinka"}
-    r_response = requests.get("https://oauth.reddit.com/r/GameDealsFree/new", headers=r_headers, params={"limit": 5})
+    r_headers = {
+        "Authorization": f"bearer {reddit_access_token}",
+        "User-Agent": "Opera/9.64 (Windows NT 5.2; sl-SI) Presto/2.12.312 Version/11.00 by Tabinka",
+    }
+    r_response = requests.get(
+        "https://oauth.reddit.com/r/GameDealsFree/new",
+        headers=r_headers,
+        params={"limit": 5},
+    )
     previous_day = dt.datetime.today() - dt.timedelta(days=1)
     deal = ""
     for x in r_response.json()["data"]["children"]:
-        if previous_day.strftime("%d.%m") <= dt.datetime.utcfromtimestamp(x["data"]["created"]).strftime("%d.%m"):
-            deal += x["data"]["title"] + " ( " + x["data"]["url_overridden_by_dest"] + " )" + "\n\n"
+        if previous_day.strftime("%d.%m") <= dt.datetime.utcfromtimestamp(
+            x["data"]["created"]
+        ).strftime("%d.%m"):
+            deal += (
+                x["data"]["title"]
+                + " ( "
+                + x["data"]["url_overridden_by_dest"]
+                + " )"
+                + "\n\n"
+            )
     return deal
 
 
 async def morning_routine():
-    news_params = {
-        "apiKey": NEWS_API,
-        "country": "us",
-        "category": "technology"
-    }
+    news_params = {"apiKey": NEWS_API, "country": "us", "category": "technology"}
     s_response = requests.get(url=SVATKY_URL)
     n_response = requests.get(url=NEWS_URL, params=news_params)
     response = requests.get(url=WEATHER_URL, params=PAR)
@@ -89,7 +104,8 @@ async def morning_routine():
     await channels.send(
         f"**Good Morning!** ☀️ \n\nToday is {dt.datetime.now().date().strftime('%A - %d.%m.')} and name day has "
         f"{svatek_name}\n\nWeather for today is going to be {weather_type} and {temp}°C\n\n**Your random motivational "
-        f"quote**\n *{random_quote}*\n\n**Fresh news**\n{articles}")
+        f"quote**\n *{random_quote}*\n\n**Fresh news**\n{articles}"
+    )
 
 
 client = commands.Bot(command_prefix="!")
@@ -153,26 +169,28 @@ async def weather(ctx):
 
 @client.command(aliases=["8ball", "8ballgame"])
 async def _8ball(ctx, *, question):
-    responses = ["It is certain.",
-                 "It is decidedly so.",
-                 "Without a doubt.",
-                 "Yes - definitely.",
-                 "You may rely on it.",
-                 "As I see it, yes.",
-                 "Most likely.",
-                 "Outlook good.",
-                 "Yes.",
-                 "Signs point to yes.",
-                 "Reply hazy, try again.",
-                 "Ask again later.",
-                 "Better not tell you now.",
-                 "Cannot predict now.",
-                 "Concentrate and ask again.",
-                 "Don't count on it.",
-                 "My reply is no.",
-                 "My sources say no.",
-                 "Outlook not so good.",
-                 "Very doubtful."]
+    responses = [
+        "It is certain.",
+        "It is decidedly so.",
+        "Without a doubt.",
+        "Yes - definitely.",
+        "You may rely on it.",
+        "As I see it, yes.",
+        "Most likely.",
+        "Outlook good.",
+        "Yes.",
+        "Signs point to yes.",
+        "Reply hazy, try again.",
+        "Ask again later.",
+        "Better not tell you now.",
+        "Cannot predict now.",
+        "Concentrate and ask again.",
+        "Don't count on it.",
+        "My reply is no.",
+        "My sources say no.",
+        "Outlook not so good.",
+        "Very doubtful.",
+    ]
     await ctx.send(f"Question: {question}\nAnswer: {random.choice(responses)}")
 
 
@@ -216,7 +234,9 @@ async def unban(ctx, *, member):
 
 @client.command(aliases=["free"])
 async def free_games(ctx):
-    await ctx.send(f"🔥 **Attention please!** 🔥\n\nThere are new free games on my radar!\n\n{getting_free_deals()}")
+    await ctx.send(
+        f"🔥 **Attention please!** 🔥\n\nThere are new free games on my radar!\n\n{getting_free_deals()}"
+    )
 
 
 @tasks.loop(seconds=500)
@@ -229,7 +249,8 @@ async def deals():
     if check_time() == "12:00:01" and getting_free_deals() != "":
         channel = client.get_channel(917509192020008980)
         await channel.send(
-            f"🔥 **Attention please!** 🔥\n\nThere are new free games on my radar!\n\n{getting_free_deals()}")
+            f"🔥 **Attention please!** 🔥\n\nThere are new free games on my radar!\n\n{getting_free_deals()}"
+        )
 
 
 @tasks.loop(seconds=1)
@@ -254,19 +275,21 @@ async def netflix():
         url = "https://unogs-unogs-v1.p.rapidapi.com/aaapi.cgi"
         querystring = {"q": "get:new1:US", "p": "1", "t": "ns", "st": "adv"}
         headers = {
-            'x-rapidapi-host': "unogs-unogs-v1.p.rapidapi.com",
-            'x-rapidapi-key': RAPID_API_KEY
+            "x-rapidapi-host": "unogs-unogs-v1.p.rapidapi.com",
+            "x-rapidapi-key": RAPID_API_KEY,
         }
         response = requests.request("GET", url, headers=headers, params=querystring)
         data_count = int(response.json()["COUNT"])
         if data_count > 0:
             for item in response.json()["ITEMS"]:
                 time.sleep(5)
-                title = html.unescape(item['title'])
-                synopsis = html.unescape(item['synopsis'])
-                text = f"**Netflix released new content!** 🙈\n\n**{title}**\n\n*{synopsis}\n\nType:{item['type']}*" \
-                       f"\n\n{item['image']}"
+                title = html.unescape(item["title"])
+                synopsis = html.unescape(item["synopsis"])
+                text = (
+                    f"**Netflix released new content!** 🙈\n\n**{title}**\n\n*{synopsis}\n\nType:{item['type']}*"
+                    f"\n\n{item['image']}"
+                )
                 await channel.send(text)
 
 
-client.run(config('DISCORD_KEY'))
+client.run(config("DISCORD_KEY"))
